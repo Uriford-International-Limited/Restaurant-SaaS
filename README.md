@@ -33,8 +33,8 @@ A powerful and scalable **SaaS solution for restaurants** to manage their online
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/mamun747/Restaurant.git
-   cd my-app
+   git clone https://github.com/Uriford-International-Limited/Restaurant-SaaS.git
+   cd Restaurant-SaaS
 
    
 2. **Install dependencies**
