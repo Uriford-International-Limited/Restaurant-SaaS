@@ -64,3 +64,5 @@ yarn dev
 
 5. **Build for production (optional)**
 ```bash
+npm run build
+```
