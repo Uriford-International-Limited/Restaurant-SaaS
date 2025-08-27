@@ -1,5 +1,5 @@
 import React from "react";
-import Logo from "../Navbar/Logo";
+import Logo from "../UI/Logo";
 import LocationBadge from "../Navbar/LocationBadge";
 import AccountMenu from "../Navbar/AccountMenu";
 import NavIcons from "../Navbar/NavIcons";
