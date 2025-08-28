@@ -47,7 +47,7 @@ const socialLinks = [
 
 const Footer = () => {
   return (
-    <footer className="bg-gradient-to-r from-pink-700 via-pink-600 to-pink-500 text-gray-100 mt-[200px]">
+    <footer className="bg-gradient-to-r from-pink-500 via-pink-600 to-pink-700 text-gray-100">
       <div className="max-w-7xl px-6 py-14 mx-auto">
         <div className="grid gap-12 md:grid-cols-4 sm:grid-cols-2">
           {/* Brand / About Section */}

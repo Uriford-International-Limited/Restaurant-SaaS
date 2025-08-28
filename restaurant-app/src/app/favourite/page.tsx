@@ -15,7 +15,7 @@ export default function FavouritesPage() {
   const favourites: FavouriteItem[] = []; // replace with real data later
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-[#2e0d1d] to-gray-800 px-4 py-12 mt-[100px]">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-[#2e0d1d] to-gray-800 px-4 py-12">
       <motion.div
         initial={{ opacity: 0, scale: 0.9, y: 40 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
