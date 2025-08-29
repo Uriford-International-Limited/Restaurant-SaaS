@@ -1,33 +1,67 @@
 "use client";
-import React, { useState } from "react";
-import Sidebar from "./components/sidebar/SideBar";
-import { menuItems } from "./data/menuItems";
-import type { MenuItem } from "./data/menuItems";
+import React, { useState, useMemo } from "react";
+import { SlidersHorizontal } from "lucide-react";
+import { useSelector } from "react-redux";
+import { RootState } from "./store/store";
+import AdvanceFilterSidebar from "./components/sidebar/AdvanceFilterSidebar";
+import restaurantData from "./data/resturent";
 
-const Home: React.FC = () => {
-  const [selectedId, setSelectedId] = useState<string>(menuItems[0]?.id ?? "");
+const HomePage: React.FC = () => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { selectedCuisines, selectedPrices, offers } = useSelector((state: RootState) => state.filters);
 
-  const selectedItem: MenuItem | undefined = menuItems.find(
-    (item: MenuItem) => item.id === selectedId
-  );
+  const filteredRestaurants = useMemo(() => {
+    return restaurantData
+      .filter((r) => (selectedCuisines.length ? selectedCuisines.includes(r.cuisine) : true))
+      .filter((r) => (selectedPrices.length ? selectedPrices.includes(r.price) : true))
+      .filter((r) => (offers.length ? offers.includes(r.offer) : true));
+  }, [selectedCuisines, selectedPrices, offers]);
 
   return (
-    <div className="flex min-h-screen">
-      <div className="lg:sticky lg:top-0">
-        <Sidebar selectedId={selectedId} onSelect={setSelectedId} />
+    <div className="flex">
+      {/* Desktop Sidebar */}
+      <div className="hidden lg:block">
+        <AdvanceFilterSidebar />
       </div>
 
-      <main className="flex-1 p-6 ">
-        {!selectedItem ? (
-          <p className="text-gray-500 text-lg">
-            Select a food item to see details
-          </p>
+      {/* Mobile Filter Button */}
+      <div className="lg:hidden fixed bottom-4 left-4 z-50">
+        <button
+          onClick={() => setSidebarOpen(true)}
+          className="flex items-center gap-2 px-4 py-2 rounded-full bg-pink-500 text-white"
+        >
+          <SlidersHorizontal size={20} /> Filter
+        </button>
+      </div>
+
+      {/* Mobile Sidebar */}
+      {sidebarOpen && (
+        <>
+          <div className="fixed inset-0 bg-black bg-opacity-50" onClick={() => setSidebarOpen(false)} />
+          <div className="fixed top-0 left-0 w-72 h-full overflow-y-auto">
+            <AdvanceFilterSidebar />
+          </div>
+        </>
+      )}
+
+      {/* Main Content */}
+      <main className="flex-1 p-6">
+        <h1 className="text-3xl font-bold mb-4">Restaurants</h1>
+        {filteredRestaurants.length === 0 ? (
+          <p>No restaurants found</p>
         ) : (
-          <div>{selectedItem.content}</div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            {filteredRestaurants.map((r) => (
+              <div key={r.id} className="p-4 border rounded-lg shadow">
+                <h2 className="font-semibold">{r.name}</h2>
+                <p>{r.cuisine} • {r.price} • {r.offer}</p>
+              </div>
+            ))}
+          </div>
         )}
       </main>
     </div>
   );
 };
 
-export default Home;
+export default HomePage;

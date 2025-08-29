@@ -1,0 +1,23 @@
+const restaurantData = [
+  { id: 1, name: "Bangla Bites", cuisine: "Bangladeshi", price: "Medium", offer: "Free delivery" },
+  { id: 2, name: "Spicy India", cuisine: "Indian", price: "Low", offer: "Deals" },
+  { id: 3, name: "China Express", cuisine: "Chinese", price: "High", offer: "Accepts vouchers" },
+  { id: 4, name: "Italiano", cuisine: "Italian", price: "High", offer: "Free delivery" },
+  { id: 5, name: "Thai Delight", cuisine: "Thai", price: "Medium", offer: "Deals" },
+  { id: 6, name: "Bengali Rasoi", cuisine: "Bangladeshi", price: "Low", offer: "Deals" },
+  { id: 7, name: "Curry House", cuisine: "Indian", price: "Medium", offer: "Free delivery" },
+  { id: 8, name: "Panda Wok", cuisine: "Chinese", price: "Medium", offer: "Accepts vouchers" },
+  { id: 9, name: "Pizza Roma", cuisine: "Italian", price: "Low", offer: "Deals" },
+  { id: 10, name: "Siam Spice", cuisine: "Thai", price: "High", offer: "Free delivery" },
+  { id: 11, name: "Dhaka Tandoori", cuisine: "Bangladeshi", price: "High", offer: "Deals" },
+  { id: 12, name: "Bombay Bites", cuisine: "Indian", price: "High", offer: "Accepts vouchers" },
+  { id: 13, name: "Beijing Bowl", cuisine: "Chinese", price: "Low", offer: "Deals" },
+  { id: 14, name: "Venice Cafe", cuisine: "Italian", price: "Medium", offer: "Free delivery" },
+  { id: 15, name: "Bangkok Garden", cuisine: "Thai", price: "Low", offer: "Accepts vouchers" },
+  { id: 16, name: "Royal Rasoi", cuisine: "Bangladeshi", price: "Medium", offer: "Deals" },
+  { id: 17, name: "Tandoori Tales", cuisine: "Indian", price: "Low", offer: "Free delivery" },
+  { id: 18, name: "Dragon Wok", cuisine: "Chinese", price: "High", offer: "Deals" },
+  { id: 19, name: "Milan Pizzeria", cuisine: "Italian", price: "High", offer: "Accepts vouchers" },
+  { id: 20, name: "Thai Orchid", cuisine: "Thai", price: "Medium", offer: "Free delivery" },
+];
+export default restaurantData;

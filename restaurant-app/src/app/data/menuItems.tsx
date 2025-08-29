@@ -1,4 +1,4 @@
-// src/data/menuItems.ts
+
 import Pizza from "../components/FoodDetails/Pizza";
 import Burger from "../components/FoodDetails/Burger";
 import Biryani from "../components/FoodDetails/Biryani";
@@ -56,6 +56,12 @@ export const menuItems: MenuItem[] = [
     label: "Sandwich",
     emoji: "🥪",
     content: <Sandwich />,
+  },
+  {
+    id: "bbq",
+    label: "BBQ Special",
+    emoji: "🔥",
+    content: <BBQ />,
   },
   {
     id: "bbq",
