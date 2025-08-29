@@ -25,6 +25,7 @@ const filterSlice = createSlice({
     setSortBy: (state, action: PayloadAction<string>) => {
       state.sortBy = action.payload;
     },
+    setQuickFilter: (state, action: PayloadAction<string[]>) => { state.quickFilter = action.payload; },
     toggleQuickFilter: (state, action: PayloadAction<string>) => {
       if (state.quickFilter.includes(action.payload)) {
         state.quickFilter = state.quickFilter.filter((x) => x !== action.payload);
@@ -65,6 +66,7 @@ const filterSlice = createSlice({
 
 export const {
   setSortBy,
+  setQuickFilter,
   toggleQuickFilter,
   toggleOffer,
   toggleCuisine,

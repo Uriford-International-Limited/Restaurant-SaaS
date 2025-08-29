@@ -8,14 +8,31 @@ import restaurantData from "./data/resturent";
 
 const HomePage: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const { selectedCuisines, selectedPrices, offers } = useSelector((state: RootState) => state.filters);
+
+  // এখানে সব filter state নিতে হবে
+  const { selectedCuisines, selectedPrices, offers, quickFilter, sortBy } = useSelector(
+    (state: RootState) => state.filters
+  );
 
   const filteredRestaurants = useMemo(() => {
-    return restaurantData
+    let res = restaurantData
       .filter((r) => (selectedCuisines.length ? selectedCuisines.includes(r.cuisine) : true))
       .filter((r) => (selectedPrices.length ? selectedPrices.includes(r.price) : true))
       .filter((r) => (offers.length ? offers.includes(r.offer) : true));
-  }, [selectedCuisines, selectedPrices, offers]);
+
+    // Quick filter logic
+    quickFilter.forEach((f) => {
+      if (f === "rating4") res = res.filter((r) => r.rating >= 4);
+      if (f === "super") res = res.filter((r:any) => r.isSuper); // যদি isSuper flag থাকে
+    });
+
+    // Sort logic
+    if (sortBy === "fastest") res.sort((a, b) => a.deliveryTime - b.deliveryTime);
+    if (sortBy === "distance") res.sort((a, b) => a.distance - b.distance);
+    if (sortBy === "top") res.sort((a, b) => b.rating - a.rating);
+
+    return res;
+  }, [selectedCuisines, selectedPrices, offers, quickFilter, sortBy]);
 
   return (
     <div className="flex">
@@ -54,7 +71,9 @@ const HomePage: React.FC = () => {
             {filteredRestaurants.map((r) => (
               <div key={r.id} className="p-4 border rounded-lg shadow">
                 <h2 className="font-semibold">{r.name}</h2>
-                <p>{r.cuisine} • {r.price} • {r.offer}</p>
+                <p>
+                  {r.cuisine} • {r.price} • {r.offer}
+                </p>
               </div>
             ))}
           </div>
