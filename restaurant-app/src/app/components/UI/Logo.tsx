@@ -6,10 +6,10 @@ const Logo = () => {
     <Image
       src="https://logolook.net/wp-content/uploads/2023/11/FoodPanda-Logo-2012.png"
       alt="FoodPanda Logo"
-      width={120}
-      height={50}
+      width={500}
+      height={500}
       priority
-      className="cursor-pointer"
+      className="cursor-pointer h-[90px] w-[130px]"
     />
   );
 };

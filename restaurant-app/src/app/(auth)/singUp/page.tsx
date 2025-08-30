@@ -97,7 +97,7 @@ export default function SignUp() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-[#2e0d1d] to-gray-800 px-4 mt-[100px]">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-[#2e0d1d] to-gray-800 px-4">
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}

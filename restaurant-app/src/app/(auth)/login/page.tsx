@@ -59,7 +59,7 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-gray-900 via-[#2e0d1d] to-gray-800 mt-[100px]">
+    <div className="min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-gray-900 via-[#2e0d1d] to-gray-800">
       {/* Motion container */}
       <motion.div
         initial={{ opacity: 0, scale: 0.9, y: 40 }}
