@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useMemo } from "react";
-import { SlidersHorizontal } from "lucide-react";
+import Link from "next/link";
+import {  SlidersHorizontal } from "lucide-react";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleFavourite } from "./redux/favourites/favouriteSlice";
@@ -24,7 +25,7 @@ const HomePage: React.FC = () => {
   const filteredRestaurants = useMemo(() => {
     let res = restaurantData
       .filter((r) => (!selectedCuisines.length || selectedCuisines.includes(r.cuisine)))
-      .filter((r) => (!selectedPrices.length || selectedPrices.includes(r.price)))
+      .filter((r) => (!selectedPrices.length || selectedPrices.includes(r.priceLabel)))
       .filter((r) => (!offers.length || offers.includes(r.offer)));
 
     quickFilter.forEach((f) => {
@@ -71,42 +72,50 @@ const HomePage: React.FC = () => {
 
       {/* Main Content */}
       <main className="flex-1 p-6">
-        <h1 className="text-3xl sm:text-4xl font-bold mb-6">Restaurants</h1>
+        <h1 className="text-3xl sm:text-4xl font-bold mb-6 text-center">All Restaurants</h1>
 
-        {(filteredRestaurants.length) &&
-         ( <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredRestaurants.map((r) => {
-              const isFav = favourites.includes(r.id);
-              return (
-                <div
-                  key={r.id}
-                  className="relative flex flex-col bg-white/10 backdrop-blur-md rounded-2xl shadow-lg border border-white/20 overflow-hidden hover:scale-105 transition-transform duration-200"
-                >
-                  <div className="h-40 w-full flex items-center justify-center bg-[#e21b70]/20 font-semibold text-lg">
-                    {r.name}
-                  </div>
+    {filteredRestaurants.length > 0 ? (
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    {filteredRestaurants.map((r) => {
+      const isFav = favourites.includes(r.id);
+      return (
+        <div key={r.id} className="relative">
+          <Link
+            href={`/restaurants/${r.id}`}
+            className="relative flex flex-col bg-white/10 backdrop-blur-md rounded-2xl shadow-lg border border-white/20 overflow-hidden hover:scale-105 transition-transform duration-200"
+          >
+            <div className="h-40 w-full flex items-center justify-center bg-[#e21b70]/20 font-semibold text-lg">
+              {r.name}
+            </div>
 
-                  <div className="p-4 flex-1 flex flex-col justify-between">
-                    <div>
-                      <h3 className="font-semibold text-white text-lg">{r.name}</h3>
-                      <p className="text-gray-300 text-sm line-clamp-2">
-                        {r.cuisine} • {r.price} • {r.offer}
-                      </p>
-                    </div>
-                  </div>
+            <div className="p-4 flex-1 flex flex-col justify-between">
+              <div>
+                <h3 className="font-semibold text-white text-lg">{r.name}</h3>
+                <p className="text-gray-300 text-sm line-clamp-2">
+                  {r.cuisine} • {r.price} • {r.offer}
+                </p>
+              </div>
+            </div>
+          </Link>
 
-                  {/* Favourite button */}
-                  <button
-                    onClick={() => dispatch(toggleFavourite(r.id))}
-                    className="absolute top-3 right-3 p-2 rounded-full bg-white/10 text-pink-500 hover:bg-white/20 transition"
-                  >
-                    {isFav ? <AiFillHeart size={20} /> : <AiOutlineHeart size={20} />}
-                  </button>
-                </div>
-              );
-            })}
-          </div>
-        )}
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              dispatch(toggleFavourite(r.id));
+            }}
+            className="absolute top-3 right-3 p-2 rounded-full bg-white/10 text-pink-500 hover:bg-white/20 transition"
+          >
+            {isFav ? <AiFillHeart size={20} /> : <AiOutlineHeart size={20} />}
+          </button>
+        </div>
+      );
+    })}
+  </div>
+) : (
+  <p className="text-gray-400">No Resturent Yet</p>
+)}
+
       </main>
     </div>
   );

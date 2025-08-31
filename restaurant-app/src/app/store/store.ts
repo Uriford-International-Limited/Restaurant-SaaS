@@ -3,11 +3,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import filterReducer from "../redux/filters/filterSlice";
 import favouriteSlice from "../redux/favourites/favouriteSlice"
+import cartSlice from "../redux/Carts/cartSlice"
 
 export const store = configureStore({
   reducer: {
     filters: filterReducer,
-    favourites:favouriteSlice
+    favourites:favouriteSlice,
+    carts:cartSlice
   },
 });
 
