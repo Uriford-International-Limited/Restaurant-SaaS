@@ -1,131 +1,88 @@
 "use client";
 
-import { useState, ChangeEvent } from "react";
+import { useState, ChangeEvent, FormEvent } from "react";
+import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 
-interface LoginData {
-  email: string;
-  password: string;
-}
-
 export default function Login() {
   const router = useRouter();
-  const [errorMessage, setErrorMessage] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false);
-  const [login, setLogin] = useState<LoginData>({ email: "", password: "" });
+  const [login, setLogin] = useState({ email: "", password: "" });
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false); // ✅ loading state
 
-  const onValueChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const onChange = (e: ChangeEvent<HTMLInputElement>) =>
     setLogin({ ...login, [e.target.name]: e.target.value });
-  };
+  const handleLogin = async (e: FormEvent) => {
+    e.preventDefault();
+    setError("");
+    setLoading(true); // start loading
 
-  const handleLogin = async () => {
-    setLoading(true);
-    setErrorMessage("");
+    const res = await signIn("credentials", {
+      redirect: false,
+      email: login.email,
+      password: login.password,
+    });
 
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/auth/login`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(login),
-        }
-      );
+    setLoading(false); // stop loading
 
-      const data = await response.json();
-
-      if (response.ok) {
-        const token = data.payload?.accessToken;
-        if (!token) {
-          setErrorMessage("Login failed: No token received.");
-          return;
-        }
-
-        if (typeof window !== "undefined") {
-          sessionStorage.setItem("isLoggedIn", "true");
-          sessionStorage.setItem("token", token);
-        }
-
-        router.push("/");
-      } else {
-        setErrorMessage(data.message || "Invalid credentials");
-      }
-    } catch {
-      setErrorMessage("Network error. Please try again later.");
-    } finally {
-      setLoading(false);
-    }
+    if (res?.error) setError(res.error);
+    else router.push("/");
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-gray-900 via-[#2e0d1d] to-gray-800">
-      {/* Motion container */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.9, y: 40 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        transition={{ duration: 0.7, ease: "easeOut" }}
-        className="w-full max-w-md bg-white/10 backdrop-blur-lg rounded-3xl shadow-2xl border border-white/10 p-8"
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-gray-900 to-gray-800 px-4">
+      <motion.form
+        onSubmit={handleLogin}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-3xl p-8 w-full max-w-md shadow-2xl"
       >
-        {/* Inputs */}
-        <div>
-          <input
-            className="w-full px-4 py-3 mt-2 rounded-xl bg-white/5 border border-gray-500 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-[#e21b70] transition font-medium"
-            onChange={onValueChange}
-            name="email"
-            type="email"
-            placeholder="Enter your email address..."
-            required
-          />
+        <h2 className="text-3xl font-bold mb-6 text-white text-center">Login</h2>
 
-          <input
-            className="w-full px-4 py-3 mt-4 rounded-xl bg-white/5 border border-gray-500 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-[#e21b70] transition font-medium"
-            onChange={onValueChange}
-            name="password"
-            type="password"
-            placeholder="Password"
-            required
-          />
+        <input
+          name="email"
+          type="email"
+          placeholder="Email"
+          value={login.email}
+          onChange={onChange}
+          className="w-full px-4 py-3 mb-4 rounded-xl bg-white/5 border border-gray-500 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-pink-400 transition"
+          required
+        />
 
-          {errorMessage && (
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="text-red-400 text-sm mt-2 font-medium"
-            >
-              {errorMessage}
-            </motion.p>
-          )}
-        </div>
+        <input
+          name="password"
+          type="password"
+          placeholder="Password"
+          value={login.password}
+          onChange={onChange}
+          className="w-full px-4 py-3 mb-4 rounded-xl bg-white/5 border border-gray-500 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-pink-400 transition"
+          required
+        />
 
-        {/* Login Button */}
-        <motion.div whileTap={{ scale: 0.97 }} className="mt-6">
-          <button
-            onClick={handleLogin}
-            disabled={loading}
-            className="w-full py-3 rounded-xl bg-[#e21b70] text-white font-medium shadow-lg hover:opacity-90 transition duration-300"
-          >
-            {loading ? "Logging in..." : "LOGIN"}
-          </button>
-        </motion.div>
+        {error && <p className="text-red-400 mb-4 text-sm">{error}</p>}
 
-        {/* Divider */}
-        <div className="flex items-center my-6 text-gray-400 font-medium">
-          <div className="flex-grow h-px bg-gray-600"></div>
-          <span className="px-3 text-sm">OR</span>
-          <div className="flex-grow h-px bg-gray-600"></div>
-        </div>
-
-        {/* Signup Button */}
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.97 }}
-          onClick={() => router.push("/singUp")}
-          className="w-full py-3 rounded-xl border border-[#e21b70] text-[#e21b70] hover:bg-[#e21b70] hover:text-white font-medium transition duration-300"
+        <button
+          type="submit"
+          disabled={loading} // ✅ disable while loading
+          className={`w-full cursor-pointer py-4 rounded-xl font-semibold text-white transition duration-200 ${
+            loading ? "bg-pink-400 cursor-not-allowed" : "bg-pink-600 hover:bg-pink-700"
+          }`}
         >
-          Create An Account
-        </motion.button>
-      </motion.div>
+          {loading ? "Logging in..." : "Login"} 
+        </button>
+
+        <p className="mt-4 text-white text-center text-sm">
+          Don t have an account?{" "}
+          <span
+            onClick={() => router.push("/singUp")}
+            className="text-pink-500 cursor-pointer hover:underline"
+          >
+            Sign Up
+          </span>
+        </p>
+      </motion.form>
     </div>
   );
 }

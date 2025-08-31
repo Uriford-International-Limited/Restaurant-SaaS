@@ -8,6 +8,7 @@ import { toggleFavourite } from "./redux/favourites/favouriteSlice";
 import { RootState } from "./store/store";
 import AdvanceFilterSidebar from "./components/sidebar/AdvanceFilterSidebar";
 import restaurantData from "./data/resturent";
+// import Form from "./components/Form";
 
 const HomePage: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -41,6 +42,9 @@ const HomePage: React.FC = () => {
   }, [selectedCuisines, selectedPrices, offers, quickFilter, sortBy]);
 
   return (
+    <>
+      {/* <Form/> */}
+ 
     <div className="flex flex-col lg:flex-row min-h-screen bg-gray-900 text-white">
       {/* Desktop Sidebar */}
       <div className="hidden lg:block w-72">
@@ -117,7 +121,9 @@ const HomePage: React.FC = () => {
 )}
 
       </main>
+    
     </div>
+     </>
   );
 };
 
