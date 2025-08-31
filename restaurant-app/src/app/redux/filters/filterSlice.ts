@@ -59,7 +59,7 @@ const filterSlice = createSlice({
       state.quickFilter = [];
       state.offers = [];
       state.selectedCuisines = [];
-      state.selectedPrices = [];
+      state.selectedPrices = []; 
     },
   },
 });

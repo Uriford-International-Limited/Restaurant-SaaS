@@ -15,6 +15,8 @@ interface NavIconsProps {
 const NavIcons: React.FC<NavIconsProps> = ({ onlyHeart = false }) => {
   // Get favourite items from Redux
   const favourites = useSelector((state: RootState) => state.favourites.items);
+ const totalQuantity = useSelector((state: RootState) => state.carts.totalQuantity);
+  
 
   return (
     <div className="flex items-center gap-3 relative">
@@ -28,12 +30,13 @@ const NavIcons: React.FC<NavIconsProps> = ({ onlyHeart = false }) => {
         )}
       </Link>
 
-      {/* Cart icon (optional) */}
+      {/* Cart icon*/}
       {!onlyHeart && (
         <Link href="/cart" className="relative">
           <IconButton icon={<LuShoppingCart size={22} />} />
-          {/* Example: cart badge */}
-          {/* <span className="absolute -top-1 -right-1 bg-green-500 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full shadow-lg">3</span> */}
+
+          {totalQuantity >0 &&
+          <span className="absolute -top-1 -right-1 bg-pink-500 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full shadow-lg">{totalQuantity}</span>}
         </Link>
       )}
     </div>
