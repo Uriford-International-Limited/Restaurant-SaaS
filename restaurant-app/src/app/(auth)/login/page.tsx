@@ -65,7 +65,7 @@ export default function Login() {
 
         <button
           type="submit"
-          disabled={loading} // ✅ disable while loading
+          disabled={loading} // disable while loading
           className={`w-full cursor-pointer py-4 rounded-xl font-semibold text-white transition duration-200 ${
             loading ? "bg-pink-400 cursor-not-allowed" : "bg-pink-600 hover:bg-pink-700"
           }`}

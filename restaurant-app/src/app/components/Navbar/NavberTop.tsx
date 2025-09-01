@@ -3,7 +3,7 @@ import Logo from "../UI/Logo";
 import LocationBadge from "../Navbar/LocationBadge";
 import AccountMenu from "../Navbar/AccountMenu";
 import NavIcons from "../Navbar/NavIcons";
-import NavbarBottom from "./NavbarBottom";
+
 
 const NavbarTop: React.FC = () => {
   return (
@@ -36,7 +36,6 @@ const NavbarTop: React.FC = () => {
           </div>
         </div>
       </div>
-      <NavbarBottom/>
     </div>
   );
 };

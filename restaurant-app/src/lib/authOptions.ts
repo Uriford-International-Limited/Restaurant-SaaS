@@ -1,7 +1,7 @@
 
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import connectDB from "../lib/db";
+import connectDB from "./db";
 import User from "../models/user";
 import bcrypt from "bcryptjs";
 
@@ -32,7 +32,7 @@ declare module "next-auth/jwt" {
 export const authOptions: NextAuthOptions = {
   session: { strategy: "jwt" }, // JWT token required for middleware
   providers: [
-    CredentialsProvider({
+    CredentialsProvider({ //when someone login trigger the function and which argument a Object
       name: "Credentials",
       credentials: {
         email: { label: "Email", type: "email", placeholder: "example@gmail.com" },
@@ -50,7 +50,7 @@ export const authOptions: NextAuthOptions = {
         if (!isValid) throw new Error("Invalid password");
 
         return {
-          id: user._id.toString(),
+          id: user.id.toString(),
           name: user.name,
           email: user.email,
           role: user.role ?? "user", // default role is "user"
@@ -59,23 +59,31 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    // Save role in JWT
-    async jwt({ token, user }) {
-      if (user) {
-        token.id = user.id;
-        token.role = user.role ?? "user";
-      }
-      return token;
-    },
-    // Make role available in session
-    async session({ session, token }) {
-      if (session.user) {
-        session.user.id = token.id as string;
-        session.user.role = token.role ?? "user";
-      }
-      return session;
-    },
+  // JWT callback – login বা session update হলে token assign
+  async jwt({ token, user }) {
+    if (user) {
+      token.id = user.id;
+      token.role = user.role ?? "user"; // default role "user"
+    }
+    return token;
   },
+
+  // Session callback – frontend session তৈরী হবে
+  async session({ session, token }) {
+    if (session.user) {
+      session.user.id = token.id as string;
+
+      // Middleware safe – role সবসময় token থেকে নাও
+      session.user.role = token.role ?? "user";
+    
+    }
+    // Debug purpose (production এ remove করা যাবে)
+    console.log("Session data:", session);
+
+    return session;
+  },
+},
+  secret:process.env.NEXTAUTH_SECRET,
   pages: {
     signIn: "/login", // redirect unauthenticated users
   },
