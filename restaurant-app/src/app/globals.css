@@ -92,11 +92,11 @@
 
   --popover-foreground: oklch(0.145 0 0);
 
-  --primary: oklch(0.205 0 0);
+  --primary: oklch(0.5687 0.223 5.5);
 
   --primary-foreground: oklch(0.985 0 0);
 
-  --secondary: oklch(0.97 0 0);
+  --secondary: oklch(0.6595 0.2456 2.46);
 
   --secondary-foreground: oklch(0.205 0 0);
 
@@ -212,7 +212,13 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
+}
+
+
+.scrollbarHide::-webkit-scrollbar {
+  display: none;
 }
