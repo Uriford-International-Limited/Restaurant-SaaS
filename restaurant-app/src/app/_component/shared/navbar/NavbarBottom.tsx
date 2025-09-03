@@ -6,7 +6,7 @@ const menuItems = [
   { icon: <Truck />, label: "Delivery", href: "/delivery" },
   { icon: <PersonStanding />, label: "Pick-up", href: "/pickup" },
   { icon: <ShoppingBag />, label: "Pandamart", href: "/pandamart" },
-  { icon: <Store />, label: "Shop", href: "/shop" },
+  { icon: <Store />, label: "Shops", href: "/shops" },
 ];
 
 const NavbarBottom = () => {

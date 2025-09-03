@@ -49,7 +49,7 @@ const Card = ({ size, overlay, content, className }: CardPropsTypes) => {
 
         {/* Card label */}
         {content?.label && (
-          <div className="absolute top-2.5 left-2.5 py-0.5 px-2.5 rounded-md bg-fp-secondary text-xs text-fp-white font-medium">
+          <div className="absolute top-2.5 left-2.5 py-0.5 px-2.5 rounded-md bg-secondary text-xs text-white font-medium">
             {content?.label}
           </div>
         )}
@@ -58,7 +58,7 @@ const Card = ({ size, overlay, content, className }: CardPropsTypes) => {
           <div>
             <Heart
               size={20}
-              className="absolute top-3 right-3 text-lg text-fp-secondary "
+              className="absolute top-3 right-3 text-lg text-secondary "
             />
             {/* <FaHeart
               className={`absolute top-3 right-3 text-lg text-fp-secondary ${
@@ -70,11 +70,11 @@ const Card = ({ size, overlay, content, className }: CardPropsTypes) => {
 
         {/* Overlay */}
         {overlay && (
-          <div className="absolute top-0 size-full bg-black/50 flex flex-col justify-center items-center gap-2">
+          <div className="absolute top-0 size-full bg-black/50 flex flex-col justify-center items-center gap-2 text-white">
             <h2 className="text-fp-white text-lg font-bold">
               Closed untill Fri 08:30
             </h2>
-            <button className="py-1 px-3 rounded-md bg-fp-white text-fp-secondary font-semibold hover:ring-1 ring-[#ffebeb] hover:bg-[#ffebeb]  transition cursor-pointer">
+            <button className="py-1 px-3 rounded-md bg-fp-white text-secondary font-semibold hover:ring-1 ring-[#ffebeb] hover:bg-[#ffebeb]  transition cursor-pointer">
               Order for later
             </button>
           </div>
@@ -101,7 +101,7 @@ const Card = ({ size, overlay, content, className }: CardPropsTypes) => {
               <Star size={14} className="text-amber-700" />
               <p className="text-sm">
                 {content.rating}
-                <span className="text-xs text-fp-gray">
+                <span className="text-xs text-gray-600">
                   ({content.ratingPersion}+)
                 </span>
               </p>

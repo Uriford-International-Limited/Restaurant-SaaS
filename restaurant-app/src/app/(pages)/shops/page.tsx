@@ -1,10 +1,12 @@
+import Card from "@/app/_component/UI/Card";
+import Carousel from "@/app/_component/UI/Carousel/Carousel";
+import SearchBox from "@/app/_component/UI/SearchBox";
 import Image from "next/image";
-import Carousel from "./_component/UI/Carousel/Carousel";
-import SearchBox from "./_component/UI/SearchBox";
-import Card from "./_component/UI/Card";
-import CardBox from "./_component/CardBox";
+import CardBoxForStore from "./_components/CardBoxForStore";
 
-export default function Home() {
+import { allStores } from "@/datas/stores"
+
+export default function Shops() {
   return (
     <div className="container relative mx-auto xl:grid grid-cols-9 gap-5 2xl:gap-12">
       <aside className="hidden xl:block col-span-2">
@@ -31,23 +33,9 @@ export default function Home() {
           ))}
         </Carousel>
 
-        {/* Deals Section */}
-        <Carousel seeMore categName="Your favourite cuisines">
-          {Array.from({ length: 10 }).map((_, i) => (
-            <Card
-              key={i}
-              size="sm"
-              content={{
-                banner:
-                  "https://images.deliveryhero.io/image/fd-bd/LH/yzit-listing.jpg?width=400&amp;height=225",
-                title: "Bazar Lagbe",
-              }}
-            />
-          ))}
-        </Carousel>
 
         {/* New on foodpanda Section */}
-        <Carousel seeMore categName="New on foodpanda">
+        <Carousel seeMore categName="Deals & More">
           {Array.from({ length: 10 }).map((_, i) => (
             <Card
               key={i}
@@ -66,23 +54,8 @@ export default function Home() {
           ))}
         </Carousel>
 
-        <CardBox categName="All restaurants">
-          {Array.from({ length: 10 }).map((_, i) => (
-            <Card
-              key={i}
-              content={{
-                banner:
-                  "https://images.deliveryhero.io/image/fd-bd/LH/yzit-listing.jpg?width=400&amp;height=225",
-                title: "Bazar Lagbe",
-                description: "Kabab",
-                rating: 5.6,
-                ratingPersion: 140,
-                deliveryTime: "25-35",
-                deliveryCharge: "49",
-              }}
-            />
-          ))}
-        </CardBox>
+
+        <CardBoxForStore allStores={allStores} /> 
       </div>
     </div>
   );
