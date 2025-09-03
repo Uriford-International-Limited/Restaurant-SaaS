@@ -18,7 +18,7 @@ type contentType = {
 type CardPropsTypes = {
   overlay?: boolean;
   className?: string;
-  size?: "md" | "lg";
+  size?: "sm" | "md" | "lg";
   content?: contentType;
 };
 
@@ -27,13 +27,17 @@ const Card = ({ size, overlay, content, className }: CardPropsTypes) => {
     <div
       className={cn(
         `border border-fp-gray/30 rounded-xl overflow-hidden cursor-pointer group ${
-          size === "md" ? "w-60 h-52" : "w-full md:w-80 lg:w-75 2xl:w-85 lg:h-65"
+          size === "sm"
+            ? "min-w-30"
+            : size === "md"
+            ? "min-w-60 h-54"
+            : "w-full md:w-80 lg:w-75 2xl:w-85 lg:h-65"
         }`,
         className
       )}
     >
       {/* Image secsion */}
-      <div className="relative md:h-[66%] overflow-hidden">
+      <div className="relative md:h-[66%] overflow-hidden border-b">
         <Image
           src={content && content.banner ? content.banner : ""}
           height={500}
@@ -52,7 +56,10 @@ const Card = ({ size, overlay, content, className }: CardPropsTypes) => {
 
         {content?.like && (
           <div>
-            <Heart size={20} className="absolute top-3 right-3 text-lg text-fp-secondary " />
+            <Heart
+              size={20}
+              className="absolute top-3 right-3 text-lg text-fp-secondary "
+            />
             {/* <FaHeart
               className={`absolute top-3 right-3 text-lg text-fp-secondary ${
                 content.like === "liked" ? "block" : "hidden"
@@ -76,14 +83,14 @@ const Card = ({ size, overlay, content, className }: CardPropsTypes) => {
 
       {/* Description */}
       <div
-        className={`lg:h-[34%] flex flex-col justify-center ${
-          size === "md" ? "p-1 px-2" : "p-2"
+        className={`lg:h-[33%] flex flex-col justify-center ${
+          size === "md" ? "px-2" : "p-2"
         } ${!content?.description && "gap-2"}`}
       >
         <div className="flex justify-between items-center">
           <h2
             className={`text-lg font-semibold text-nowrap text-ellipsis overflow-hidden ${
-              size === "md" && "leading-6"
+              size === "sm" ? "text-sm text-center text-primary" : size === "md" && "leading-6"
             }`}
           >
             {content?.title ? content.title : "Please give any title!"}
@@ -111,13 +118,13 @@ const Card = ({ size, overlay, content, className }: CardPropsTypes) => {
         <div className="text-gray-400 text-xs flex items-center">
           {content?.deliveryTime && (
             <p className="flex items-center gap-0.5">
-              <Clock size={14}/> {content.deliveryTime} min .
+              <Clock size={14} /> {content.deliveryTime} min .
             </p>
           )}
 
           {content?.deliveryCharge && (
             <p className="flex items-center gap-0.5">
-              <Bike  size={14} className="ms-2" />
+              <Bike size={14} className="ms-2" />
               Tk {content.deliveryCharge}
             </p>
           )}
