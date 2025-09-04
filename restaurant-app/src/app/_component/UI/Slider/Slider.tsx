@@ -2,7 +2,7 @@
 
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { ReactNode, useEffect, useRef, useState } from "react";
-import "../Carousel/carousel.css";
+import "../Slider/slider.css";
 
 type CategPropsTypes = {
   categName: string;
@@ -10,7 +10,7 @@ type CategPropsTypes = {
   children: ReactNode;
 };
 
-const Carousel = ({ categName, seeMore, children }: CategPropsTypes) => {
+const Slider = ({ categName, seeMore, children }: CategPropsTypes) => {
   const carouselRef = useRef<HTMLDivElement>(null);
   const [showLeftBtn, setShowLeftBtn] = useState(false);
 
@@ -52,8 +52,14 @@ const Carousel = ({ categName, seeMore, children }: CategPropsTypes) => {
   return (
     <section className="pt-7 md:pt-10">
       <div className="flex justify-between items-end px-2.5">
-        <h2 className="text-xl font-semibold md:text-3xl md:font-bold">{categName}</h2>
-        {seeMore && <p className="underline text-xs md:text-sm cursor-pointer">View All</p>}
+        <h2 className="text-xl font-semibold md:text-3xl md:font-bold">
+          {categName}
+        </h2>
+        {seeMore && (
+          <p className="underline text-xs md:text-sm cursor-pointer">
+            View All
+          </p>
+        )}
       </div>
 
       <div className="relative">
@@ -84,4 +90,4 @@ const Carousel = ({ categName, seeMore, children }: CategPropsTypes) => {
   );
 };
 
-export default Carousel;
+export default Slider;

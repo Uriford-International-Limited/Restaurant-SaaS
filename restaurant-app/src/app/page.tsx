@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Carousel from "./_component/UI/Carousel/Carousel";
+import Slider from "./_component/UI/Slider/Slider";
 import SearchBox from "./_component/UI/SearchBox";
 import Card from "./_component/UI/Card";
 import CardBox from "./_component/UI/CardBox";
@@ -22,7 +22,7 @@ export default function Home() {
         <SearchBox />
 
         {/* Deals Section */}
-        <Carousel seeMore categName="Your daily deals">
+        <Slider seeMore categName="Your daily deals">
           {Array.from({ length: 10 }).map((_, i) => (
             <Image
               key={i}
@@ -33,10 +33,10 @@ export default function Home() {
               className="w-[300px] cursor-pointer hover:scale-105 transition"
             />
           ))}
-        </Carousel>
+        </Slider>
 
         {/* Deals Section */}
-        <Carousel seeMore categName="Your favourite cuisines">
+        <Slider seeMore categName="Your favourite cuisines">
           {Array.from({ length: 10 }).map((_, i) => (
             <Card
               key={i}
@@ -48,10 +48,10 @@ export default function Home() {
               }}
             />
           ))}
-        </Carousel>
+        </Slider>
 
         {/* New on foodpanda Section */}
-        <Carousel seeMore categName="New on foodpanda">
+        <Slider seeMore categName="New on foodpanda">
           {Array.from({ length: 10 }).map((_, i) => (
             <Card
               key={i}
@@ -68,7 +68,7 @@ export default function Home() {
               }}
             />
           ))}
-        </Carousel>
+        </Slider>
 
         <CardBox categName="All restaurants">
           {Array.from({ length: 10 }).map((_, i) => (

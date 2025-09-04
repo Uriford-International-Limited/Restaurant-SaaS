@@ -1,0 +1,21 @@
+.customCarousel::-webkit-scrollbar {
+    display: none;
+}
+
+
+@layer components {
+    .carouselBtn {
+        position: absolute;
+        top: 50%;
+        border-radius: 50%;
+        background: var(--color-fp-white);
+        border: 1px solid var(--color-fp-gray);
+        justify-content: center;
+        align-items: center;
+        transition: 105s;
+        transform: translate(-50%, -50%);
+        cursor: pointer;
+        box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.3);
+    }
+
+}

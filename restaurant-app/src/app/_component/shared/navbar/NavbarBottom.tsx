@@ -3,7 +3,7 @@ import Link from "next/link";
 
 // Menu items with links
 const menuItems = [
-  { icon: <Truck />, label: "Delivery", href: "/delivery" },
+  { icon: <Truck />, label: "Delivery", href: "/" },
   { icon: <PersonStanding />, label: "Pick-up", href: "/pickup" },
   { icon: <ShoppingBag />, label: "Pandamart", href: "/pandamart" },
   { icon: <Store />, label: "Shops", href: "/shops" },
