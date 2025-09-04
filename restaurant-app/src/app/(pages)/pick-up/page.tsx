@@ -3,7 +3,6 @@ import Card from '@/app/_component/UI/Card'
 import CardBox from '@/app/_component/UI/CardBox'
 import SearchBox from '@/app/_component/UI/SearchBox'
 import Slider from '@/app/_component/UI/Slider/Slider'
-import Image from 'next/image'
 import React from 'react'
 
 const page = () => {

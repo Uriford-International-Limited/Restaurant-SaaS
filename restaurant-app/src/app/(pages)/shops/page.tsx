@@ -1,11 +1,11 @@
 import Card from "@/app/_component/UI/Card";
-import Carousel from "@/app/_component/UI/Carousel/Carousel";
 import SearchBox from "@/app/_component/UI/SearchBox";
 import Image from "next/image";
 import CardBoxForStore from "./_components/CardBoxForStore";
-
-import { allStores } from "@/datas/stores"
 import Sidebar from "@/app/_component/shared/sidebar/Sidebar";
+import Slider from "@/app/_component/UI/Slider/Slider";
+
+import { allStores } from "@/datas/stores";
 
 export default function Shops() {
   return (
@@ -13,7 +13,7 @@ export default function Shops() {
       <div className="hidden xl:block col-span-2">
         <div className="sticky top-[122px] p-4 h-[calc(100vh_-_122px)]">
           <div className="size-full border border-fp-gray rounded-2xl overflow-y-scroll">
-            <Sidebar/>
+            <Sidebar />
           </div>
         </div>
       </div>
@@ -23,7 +23,7 @@ export default function Shops() {
         <SearchBox />
 
         {/* Deals Section */}
-        <Carousel seeMore categName="Your daily deals">
+        <Slider seeMore categName="Your daily deals">
           {Array.from({ length: 10 }).map((_, i) => (
             <Image
               key={i}
@@ -34,11 +34,10 @@ export default function Shops() {
               className="w-[300px] cursor-pointer hover:scale-105 transition"
             />
           ))}
-        </Carousel>
-
+        </Slider>
 
         {/* New on foodpanda Section */}
-        <Carousel seeMore categName="Deals & More">
+        <Slider seeMore categName="Deals & More">
           {Array.from({ length: 10 }).map((_, i) => (
             <Card
               key={i}
@@ -55,10 +54,9 @@ export default function Shops() {
               }}
             />
           ))}
-        </Carousel>
+        </Slider>
 
-
-        <CardBoxForStore allStores={allStores} /> 
+        <CardBoxForStore allStores={allStores} />
       </div>
     </div>
   );
