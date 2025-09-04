@@ -3,6 +3,9 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, User } from "lucide-react";
+import facebook from "../../../../../../public/facebook.svg";
+import google from "../../../../../../public/google.svg";
+import apple from "../../../../../../public/apple.svg";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -70,8 +73,14 @@ const UserContent = () => {
                   <Button
                     size="lg"
                     variant="outline"
-                    className="cursor-pointer text-[15px] h-11 text-white bg-[#1877F2]"
+                    className="cursor-pointer text-[15px] h-11 text-white bg-[#1877F2] grid grid-cols-4"
                   >
+                    <Image
+                      src={facebook}
+                      width={100}
+                      height={100}
+                      alt="facebook" className="size-6"
+                    />
                     Continue with Facebook
                   </Button>
 
@@ -79,16 +88,18 @@ const UserContent = () => {
                     onClick={() => signIn("google")}
                     size="lg"
                     variant="outline"
-                    className="cursor-pointer text-[15px] h-11 hover:bg-gray-300/50"
+                    className="cursor-pointer text-[15px] h-11 hover:bg-gray-300/50 grid grid-cols-4"
                   >
+                    <Image src={google} width={100} height={100} alt="google" className="size-6" />
                     Continue with Google
                   </Button>
 
                   <Button
                     size="lg"
                     variant="outline"
-                    className="cursor-pointer text-[15px] h-11 text-white bg-[#000000]"
+                    className="cursor-pointer text-[15px] h-11 text-white bg-[#000000] grid grid-cols-4"
                   >
+                    <Image src={apple} width={100} height={100} alt="apple" className="size-6" />
                     Continue with Apple
                   </Button>
 

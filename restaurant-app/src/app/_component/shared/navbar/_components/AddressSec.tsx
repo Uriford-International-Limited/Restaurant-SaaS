@@ -29,7 +29,7 @@ const AddressSec = () => {
         <PopoverTrigger asChild>
           <Button
             variant="ghost"
-            className="text-base font-medium text-gray-600 cursor-pointer"
+            className="text-base font-medium text-gray-600 cursor-pointer bg-accent shadow"
           >
             <MapPin className="size-5" />
             <address className="max-w-90 overflow-hidden text-ellipsis text-nowrap">
