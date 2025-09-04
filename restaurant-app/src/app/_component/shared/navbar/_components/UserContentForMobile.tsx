@@ -1,16 +1,32 @@
+"use client";
+
 import Logo from "@/components/ui/Logo";
 import { User, X } from "lucide-react";
+import { useSession } from "next-auth/react";
+import Image from "next/image";
 
 const length = 8;
 
 const UserContentForMobile = () => {
+  const { data: session } = useSession();
+
   return (
     <div className="sm:hidden ">
       {/* checkbox */}
       <input type="checkbox" id="menuToggle" className="hidden peer" />
 
       <label htmlFor="menuToggle" className="peer-checked:hidden">
-        <User className="bg-accent p-1.5 size-10 rounded-full" />
+        {session?.user?.image ? (
+          <Image
+            src={session.user.image}
+            width={100}
+            height={100}
+            alt="Profile picture"
+            className="size-8 rounded-full"
+          />
+        ) : (
+          <User className="bg-accent p-1.5 size-10 rounded-full" />
+        )}
       </label>
 
       {/* Main user content */}

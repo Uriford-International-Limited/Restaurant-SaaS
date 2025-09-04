@@ -3,7 +3,10 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   /* config options here */
   images: {
-    remotePatterns: [{ protocol: "https", hostname: "images.deliveryhero.io" }],
+    remotePatterns: [
+      { protocol: "https", hostname: "images.deliveryhero.io" },
+      { protocol: "https", hostname: "lh3.googleusercontent.com" },
+    ],
   },
 };
 

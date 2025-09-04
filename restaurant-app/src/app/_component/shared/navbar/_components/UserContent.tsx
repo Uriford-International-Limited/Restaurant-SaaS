@@ -1,5 +1,6 @@
 "use client";
 
+import { signIn, signOut, useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, User } from "lucide-react";
 import {
@@ -16,7 +17,6 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -27,15 +27,16 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
+import Image from "next/image";
 
 const UserContent = () => {
-  const [x] = useState(false);
+  const { data: session } = useSession();
 
   return (
     <div className="hidden sm:block">
-      {!x ? (
+      {!session ? (
         /* before login */
-        <div className="">
+        <div>
           <Dialog>
             <form>
               <div className="flex gap-7">
@@ -73,13 +74,16 @@ const UserContent = () => {
                   >
                     Continue with Facebook
                   </Button>
+
                   <Button
+                    onClick={() => signIn("google")}
                     size="lg"
                     variant="outline"
                     className="cursor-pointer text-[15px] h-11 hover:bg-gray-300/50"
                   >
                     Continue with Google
                   </Button>
+
                   <Button
                     size="lg"
                     variant="outline"
@@ -87,13 +91,16 @@ const UserContent = () => {
                   >
                     Continue with Apple
                   </Button>
+
                   <Separator className="my-2" />
+
                   <Button
                     size="lg"
                     className="cursor-pointer text-[15px] h-11 "
                   >
                     Login
                   </Button>
+
                   <Button
                     size="lg"
                     variant="outline"
@@ -124,8 +131,18 @@ const UserContent = () => {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" className="cursor-pointer">
-                <User />
-                Al amin
+                {session.user?.image ? (
+                  <Image
+                    src={session.user.image}
+                    width={100}
+                    height={100}
+                    alt="Profile picture"
+                    className="size-6 rounded-full"
+                  />
+                ) : (
+                  <User />
+                )}
+                {session.user?.name}
                 <ChevronDown color="var(--primary)" />
               </Button>
             </DropdownMenuTrigger>
@@ -173,7 +190,10 @@ const UserContent = () => {
               <DropdownMenuItem>Support</DropdownMenuItem>
               <DropdownMenuItem disabled>API</DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => signOut()}
+                className="cursor-pointer"
+              >
                 Log out
                 <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
               </DropdownMenuItem>
