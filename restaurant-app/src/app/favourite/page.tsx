@@ -1,111 +1,79 @@
 "use client";
 
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import Image from "next/image";
+import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../store/store";
-import restaurantData from "../data/resturent";
 import { toggleFavourite } from "../redux/favourites/favouriteSlice";
+
+interface Restaurant {
+  _id: string;
+  name: string;
+  cuisine: string;
+  priceLabel: string;
+  price: number;
+  offer?: string;
+  rating: number;
+  distance: number;
+  deliveryTime: number;
+  isSuper?: boolean;
+  image?: string;
+}
 
 export default function FavouritesPage() {
   const dispatch = useDispatch();
   const favouriteIds = useSelector((state: RootState) => state.favourites.items);
 
-  // Map favourite IDs to restaurant objects
-  const favourites = restaurantData.filter((r) => favouriteIds.includes(r.id));
+  const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setLoading(true);
+    fetch("/api/restaurants", { cache: "no-store" })
+      .then(async (res) => {
+        if (!res.ok) throw new Error("Failed to fetch");
+        const data: Restaurant[] = await res.json();
+        // Filter only favourites
+        setRestaurants(data.filter((r) => favouriteIds.includes(r._id)));
+      })
+      .catch((err) => console.error(err))
+      .finally(() => setLoading(false));
+  }, [favouriteIds]);
+
+  if (loading) return <p className="text-white text-center mt-10">Loading...</p>;
+  if (restaurants.length === 0) return <p className="text-white text-center mt-10">No favourites yet</p>;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-[#2e0d1d] to-gray-800 px-4 py-12 flex justify-center">
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95, y: 20 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-        className="w-full max-w-5xl"
-      >
-        {favourites.length === 0 ? (
-          <div className="flex flex-col items-center justify-center text-center">
-            <div className="mx-auto mb-6 h-24 w-24 rounded-full flex items-center justify-center bg-[#e21b70]/10">
-              <svg
-                width={40}
-                height={40}
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                className="text-[#e21b70]"
-              >
-                <path d="M12 21s-7.534-4.153-10-8.5C.5 8.5 3 6 5.5 6 7.24 6 8.5 7 9.25 8c.75-1 2.01-2 3.75-2C15 6 17.5 8.5 22 12.5 19.534 16.847 12 21 12 21z" />
-              </svg>
+    <div className="min-h-screen bg-gray-900 px-4 py-12 flex justify-center">
+      <div className="w-full max-w-5xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {restaurants.map((r) => (
+          <div key={r._id} className="relative flex flex-col bg-white/10 backdrop-blur-md rounded-2xl shadow-lg border border-white/20 overflow-hidden transition-transform duration-200 hover:scale-105">
+            {r.image ? (
+              <div className="relative w-full h-48">
+                <Image src={r.image} alt={r.name} fill className="object-cover rounded-t-2xl" />
+              </div>
+            ) : (
+              <div className="h-auto w-full flex items-center justify-center bg-gray-600 rounded-t-2xl text-white font-semibold">
+                {r.name}
+              </div>
+            )}
+
+            <div className="p-4 flex-1 flex flex-col justify-between">
+              <h3 className="font-semibold text-white text-lg">{r.name}</h3>
+              <p className="text-gray-300 text-sm line-clamp-2">{r.cuisine} • {r.priceLabel} • {r.offer || "No Offer"}</p>
             </div>
-            <h1 className="text-3xl font-bold text-white mb-2">No favourites yet</h1>
-            <p className="text-gray-300 text-sm mb-6">
-              Save items to see them here. Start exploring and add your favourites.
-            </p>
-            <Link
-              href="/"
-              className="inline-block w-full sm:w-1/2 py-3 font-semibold text-white bg-[#e21b70] rounded-xl shadow-md hover:bg-[#e21b70]/90 transition"
+
+            <button
+              onClick={() => dispatch(toggleFavourite(r._id))}
+              className="absolute top-3 right-3 p-2 rounded-full bg-white/10 text-pink-500 hover:bg-white/20 transition"
             >
-              ← Back to Home
-            </Link>
+              <AiFillHeart size={20} />
+            </button>
           </div>
-        ) : (
-          <div>
-            <div className="mb-8 text-center">
-              <h1 className="text-4xl font-bold text-white mb-2">Your Favourites</h1>
-              <p className="text-gray-300 text-sm">
-                You have {favourites.length} saved item{favourites.length > 1 ? "s" : ""}.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {favourites.map((r) => (
-                <motion.article
-                  key={r.id}
-                  whileHover={{ scale: 1.03 }}
-                  className="relative flex flex-col bg-white/10 backdrop-blur-md rounded-2xl shadow-lg border border-white/20 overflow-hidden transition-transform duration-200"
-                >
-                  {/* Placeholder for Image */}
-                  <div className="h-40 w-full flex items-center justify-center bg-[#e21b70]/20 text-[#e21b70] font-semibold text-lg">
-                    {r.name}
-                  </div>
-
-                  {/* Info */}
-                  <div className="p-4 flex-1 flex flex-col justify-between">
-                    <div>
-                      <h3 className="font-semibold text-white text-lg mb-1">{r.name}</h3>
-                      <p className="text-gray-300 text-sm line-clamp-2">
-                        {r.cuisine} • {r.price} • {r.offer}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Remove favourite button */}
-                  <button
-                    onClick={() => dispatch(toggleFavourite(r.id))}
-                    className="absolute top-3 right-3 p-2 rounded-full bg-white/10 text-pink-500 hover:bg-white/20 transition"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-10.707a1 1 0 00-1.414-1.414L10 8.586 7.707 6.293a1 1 0 00-1.414 1.414L8.586 10l-2.293 2.293a1 1 0 001.414 1.414L10 11.414l2.293 2.293a1 1 0 001.414-1.414L11.414 10l2.293-2.293z" />
-                    </svg>
-                  </button>
-                </motion.article>
-              ))}
-            </div>
-
-            <div className="mt-10 text-center">
-              <Link
-                href="/"
-                className="inline-block w-full sm:w-1/2 py-3 font-semibold text-white bg-[#e21b70] rounded-xl shadow-md hover:bg-[#e21b70]/90 transition"
-              >
-                ← Back to Home
-              </Link>
-            </div>
-          </div>
-        )}
-      </motion.div>
+        ))}
+      </div>
     </div>
   );
 }

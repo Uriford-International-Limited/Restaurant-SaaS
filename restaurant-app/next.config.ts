@@ -6,7 +6,8 @@ const nextConfig: NextConfig = {
       "upload.wikimedia.org",
       "images.pexels.com",
       "logolook.net",
-      "res.cloudinary.com"
+      "res.cloudinary.com",
+      "cdni.iconscout.com", 
     ],
   },
 };
