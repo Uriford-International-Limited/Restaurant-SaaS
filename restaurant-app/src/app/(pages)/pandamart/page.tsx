@@ -20,7 +20,7 @@ const Pandamart = () => {
         <Header />
         <SearchBox />
 
-        <main className="container lg:w-[85%] mx-auto space-y-8">
+        <main className="container lg:w-[85%] mx-auto space-y-8 pb-8">
 
           <Carousel className="w-full px-2 md:p-0">
             <CarouselContent>
