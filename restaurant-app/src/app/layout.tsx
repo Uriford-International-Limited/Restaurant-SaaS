@@ -19,7 +19,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <ProvidersClient>
           <NavbarClient />
-               <main>{children}</main>
+          <main>{children}</main>
           <FooterClient />
         </ProvidersClient>
       </body>

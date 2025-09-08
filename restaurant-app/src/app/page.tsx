@@ -8,6 +8,7 @@ import { toggleFavourite } from "./redux/favourites/favouriteSlice";
 import { RootState } from "./store/store";
 import AdvanceFilterSidebar from "./components/sidebar/AdvanceFilterSidebar";
 import restaurantData from "./data/resturent";
+import Shad from "./components/Shad";
 // import Form from "./components/Form";
 
 const HomePage: React.FC = () => {
@@ -44,6 +45,7 @@ const HomePage: React.FC = () => {
   return (
     <>
       {/* <Form/> */}
+      <Shad/>
  
     <div className="flex flex-col lg:flex-row min-h-screen bg-gray-900 text-white">
       {/* Desktop Sidebar */}

@@ -78,7 +78,7 @@ export const authOptions: NextAuthOptions = {
     
     }
     // Debug purpose (production এ remove করা যাবে)
-    console.log("Session data:", session);
+    // console.log("Session data:", session);
 
     return session;
   },

@@ -1,9 +1,15 @@
-import React from 'react'
+import React from 'react';
+import RestaurantForm from "./RestaurantForm"
+import RestaurantList from './RestaurantList';
 
 function page() {
   return (
-    <div className='text-xl text-center '>I am admin page</div>
+   <>
+ <RestaurantForm/>
+ <RestaurantList/>
+ 
+   </>
   )
 }
 
-export default page;
+export default page

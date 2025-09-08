@@ -1,8 +1,13 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-   images: {
-    domains: ["logolook.net"],
+  images: {
+    domains: [
+      "upload.wikimedia.org",
+      "images.pexels.com",
+      "logolook.net",
+      "res.cloudinary.com"
+    ],
   },
 };
 
