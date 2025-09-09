@@ -8,8 +8,9 @@ import { useSession } from "next-auth/react";
 
 const NavbarBottom = () => {
   const { data: session } = useSession();
+  const role = session?.user?.role;
 
-  // Menu items with links
+  // Default menu items
   const menuItems = [
     { icon: <FaMotorcycle />, label: "Delivery", href: "/delivery" },
     { icon: <FaStore />, label: "Pick-up", href: "/pickup" },
@@ -17,10 +18,19 @@ const NavbarBottom = () => {
     { icon: <FaShoppingBasket />, label: "Shop", href: "/shop" },
   ];
 
-  // If user is admin, add Admin item
-  if (session?.user?.role === "admin") {
+  // Admin can see only admin panel
+  if (role === "admin") {
     menuItems.push({ icon: <FaUserShield />, label: "Admin", href: "/admin" });
   }
+
+  // Super-admin can see both admin + super-admin
+  if (role === "super-admin") {
+    menuItems.push(
+      { icon: <FaUserShield />, label: "Admin", href: "/admin" },
+      { icon: <FaUserShield />, label: "Super Admin", href: "/super-admin" }
+    );
+  }
+
   return (
     <div className="bg-white shadow-sm">
       <div className="flex justify-center gap-10 py-4 text-gray-700 text-lg font-medium">

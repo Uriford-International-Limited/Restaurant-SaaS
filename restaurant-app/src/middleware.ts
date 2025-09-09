@@ -5,13 +5,26 @@ export default withAuth({
     signIn: "/login", // unauthorized হলে এখানে redirect করবে
   },
   callbacks: {
-    authorized: ({ token }) => {
-      // token নেই বা role admin না → unauthorized
-      return !!token && token.role === "admin";
+    authorized: ({ token, req }) => {
+      if (!token) return false;
+
+      const { pathname } = req.nextUrl;
+
+      // /admin → admin + super-admin allowed
+      if (pathname.startsWith("/admin")) {
+        return token.role === "admin" || token.role === "super-admin";
+      }
+
+      // /super-admin → শুধু super-admin allowed
+      if (pathname.startsWith("/super-admin")) {
+        return token.role === "super-admin";
+      }
+
+      return true;
     },
   },
 });
 
 export const config = {
-  matcher: ["/admin/:path*"], // শুধু /admin routes protect করবে
+  matcher: ["/admin/:path*", "/super-admin/:path*"],
 };
