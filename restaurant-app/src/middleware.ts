@@ -10,7 +10,7 @@ export default withAuth({
 
       const { pathname } = req.nextUrl;
 
-      // /admin → admin + super-admin allowed
+      // /admin → শুধু admin + super-admin allowed
       if (pathname.startsWith("/admin")) {
         return token.role === "admin" || token.role === "super-admin";
       }
@@ -20,11 +20,20 @@ export default withAuth({
         return token.role === "super-admin";
       }
 
-      return true;
+      // /profile → যে কোনো logged-in user allowed
+      if (pathname.startsWith("/profile")) {
+        return !!token; // শুধু লগইন check
+      }
+
+      return true; // অন্য রুট গুলোতে restriction নাই
     },
   },
 });
 
 export const config = {
-  matcher: ["/admin/:path*", "/super-admin/:path*"],
+  matcher: [
+    "/admin/:path*",
+    "/super-admin/:path*",
+    "/profile/:path*", // Profile route এখন protect হলো
+  ],
 };

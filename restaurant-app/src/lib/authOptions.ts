@@ -1,4 +1,3 @@
-
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import connectDB from "./db";
@@ -10,7 +9,9 @@ declare module "next-auth" {
   interface Session {
     user: {
       id: string;
-      name?: string | null;
+      firstName?: string | null;
+      lastName?: string | null;
+      mobile?: string | null;
       email?: string | null;
       role?: string | null;
     };
@@ -18,6 +19,10 @@ declare module "next-auth" {
 
   interface User {
     id: string;
+    firstName?: string;
+    lastName?: string;
+    mobile?: string;
+    email?: string;
     role?: string;
   }
 }
@@ -25,14 +30,17 @@ declare module "next-auth" {
 declare module "next-auth/jwt" {
   interface JWT {
     id: string;
+    firstName?: string | null;
+    lastName?: string | null;
+    mobile?: string | null;
     role?: string | null;
   }
 }
 
 export const authOptions: NextAuthOptions = {
-  session: { strategy: "jwt" }, // JWT token required for middleware
+  session: { strategy: "jwt" },
   providers: [
-    CredentialsProvider({ //when someone login trigger the function and which argument a Object
+    CredentialsProvider({
       name: "Credentials",
       credentials: {
         email: { label: "Email", type: "email", placeholder: "example@gmail.com" },
@@ -41,7 +49,7 @@ export const authOptions: NextAuthOptions = {
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null;
 
-        await connectDB(); // Connect to MongoDB
+        await connectDB();
 
         const user = await User.findOne({ email: credentials.email });
         if (!user) throw new Error("No user found with this email");
@@ -51,41 +59,41 @@ export const authOptions: NextAuthOptions = {
 
         return {
           id: user.id.toString(),
-          name: user.name,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          mobile: user.mobile,
           email: user.email,
-          role: user.role ?? "user", // default role is "user"
+          role: user.role ?? "user",
         };
       },
     }),
   ],
   callbacks: {
-  // JWT callback – login বা session update হলে token assign
-  async jwt({ token, user }) {
-    if (user) {
-      token.id = user.id;
-      token.role = user.role ?? "user"; // default role "user"
-    }
-    return token;
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+        token.firstName = user.firstName;
+        token.lastName = user.lastName;
+        token.mobile = user.mobile;
+        token.role = user.role ?? "user";
+      }
+      return token;
+    },
+
+    async session({ session, token }) {
+      if (session.user) {
+        session.user.id = token.id as string;
+        session.user.firstName = token.firstName as string;
+        session.user.lastName = token.lastName as string;
+        session.user.mobile = token.mobile as string;
+        session.user.role = token.role ?? "user";
+      }
+      return session;
+    },
   },
-
-  // Session callback – frontend session তৈরী হবে
-  async session({ session, token }) {
-    if (session.user) {
-      session.user.id = token.id as string;
-
-      // Middleware safe – role সবসময় token থেকে নাও
-      session.user.role = token.role ?? "user";
-    
-    }
-    // Debug purpose (production এ remove করা যাবে)
-    // console.log("Session data:", session);
-
-    return session;
-  },
-},
-  secret:process.env.NEXTAUTH_SECRET,
+  secret: process.env.NEXTAUTH_SECRET,
   pages: {
-    signIn: "/login", // redirect unauthenticated users
+    signIn: "/login",
   },
 };
 
