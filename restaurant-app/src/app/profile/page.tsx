@@ -5,49 +5,28 @@ import { useSession } from "next-auth/react";
 
 export default function ProfilePage() {
   const { data: session, update } = useSession();
-  const [form, setForm] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    mobile: "",
-    oldPassword: "",
-    newPassword: "",
-  });
-  const [loading, setLoading] = useState(false);
+
+  const [nameForm, setNameForm] = useState({ firstName: "", lastName: "" });
+  const [emailForm, setEmailForm] = useState({ email: "" });
+  const [mobileForm, setMobileForm] = useState({ mobile: "" });
+  const [passwordForm, setPasswordForm] = useState({ oldPassword: "", newPassword: "" });
+
+  const [loading, setLoading] = useState("");
   const [message, setMessage] = useState("");
 
   useEffect(() => {
     if (session?.user) {
-      setForm({
-        firstName: session.user.firstName || "",
-        lastName: session.user.lastName || "",
-        email: session.user.email || "",
-        mobile: session.user.mobile || "",
-        oldPassword: "",
-        newPassword: "",
-      });
+      setNameForm({ firstName: session.user.firstName || "", lastName: session.user.lastName || "" });
+      setEmailForm({ email: session.user.email || "" });
+      setMobileForm({ mobile: session.user.mobile || "" });
     }
-  }, [session]);
+  }, []);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
+  const updateProfile = async (body: any, section: string) => {
+    setLoading(section);
     setMessage("");
 
     try {
-      // Password বাদ দিয়ে আলাদা করলাম
-      const { oldPassword, newPassword, ...profileData } = form;
-
-      const body: any = { ...profileData };
-      if (oldPassword && newPassword) {
-        body.oldPassword = oldPassword;
-        body.newPassword = newPassword;
-      }
-
       const res = await fetch("/api/user/update", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -57,90 +36,121 @@ export default function ProfilePage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Something went wrong");
 
-      setMessage("Profile updated successfully ✅");
-      setForm({ ...form, oldPassword: "", newPassword: "" });
-      update(); // next-auth session refresh
+      setMessage(`${section} updated successfully ✅`);
+      if (section === "Name") setNameForm(body);
+      if (section === "Email") setEmailForm(body);
+      if (section === "Mobile") setMobileForm(body);
+      if (section === "Password") setPasswordForm({ oldPassword: "", newPassword: "" });
+
+      update();
     } catch (err: any) {
       setMessage(err.message);
     } finally {
-      setLoading(false);
+      setLoading("");
     }
   };
 
   return (
-    <div className="max-w-2xl mx-auto mt-10 bg-white shadow-lg rounded-2xl p-8">
-      <h1 className="text-2xl font-bold text-gray-800 mb-6">My Profile</h1>
+    <div className="max-w-3xl mx-auto mt-12 p-6 space-y-10">
+      <h1 className="text-3xl font-bold text-gray-800 text-center mb-8">My Profile</h1>
 
       {message && (
-        <p
-          className={`mb-4 text-center font-medium ${
-            message.includes("success") ? "text-green-600" : "text-red-500"
-          }`}
-        >
+        <div className={`px-4 py-3 rounded-lg text-center font-medium ${message.includes("✅") ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
           {message}
-        </p>
+        </div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <input
-          type="text"
-          name="firstName"
-          value={form.firstName}
-          onChange={handleChange}
-          placeholder="First Name"
-          className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-pink-400 focus:outline-none"
-        />
-        <input
-          type="text"
-          name="lastName"
-          value={form.lastName}
-          onChange={handleChange}
-          placeholder="Last Name"
-          className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-pink-400 focus:outline-none"
-        />
+      {/* --- Name Card --- */}
+      <div className="bg-white shadow-md rounded-xl p-6 space-y-4">
+        <h2 className="text-xl font-semibold text-gray-700">Name</h2>
+        <div className="flex flex-col md:flex-row gap-4">
+          <input
+            type="text"
+            value={nameForm.firstName}
+            onChange={(e) => setNameForm({ ...nameForm, firstName: e.target.value })}
+            placeholder="First Name"
+            className="flex-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-pink-400 focus:outline-none"
+          />
+          <input
+            type="text"
+            value={nameForm.lastName}
+            onChange={(e) => setNameForm({ ...nameForm, lastName: e.target.value })}
+            placeholder="Last Name"
+            className="flex-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-pink-400 focus:outline-none"
+          />
+        </div>
+        <button
+          onClick={() => updateProfile(nameForm, "Name")}
+          disabled={loading === "Name"}
+          className="w-full md:w-auto px-6 py-2 bg-gradient-to-r from-pink-500 to-pink-600 text-white font-medium rounded-lg shadow hover:from-pink-600 hover:to-pink-700 transition disabled:opacity-50"
+        >
+          {loading === "Name" ? "Saving..." : "Save"}
+        </button>
+      </div>
+
+      {/* --- Email Card --- */}
+      <div className="bg-white shadow-md rounded-xl p-6 space-y-4">
+        <h2 className="text-xl font-semibold text-gray-700">Email</h2>
         <input
           type="email"
-          name="email"
-          value={form.email}
-          onChange={handleChange}
+          value={emailForm.email}
+          onChange={(e) => setEmailForm({ email: e.target.value })}
           placeholder="Email"
-          className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-pink-400 focus:outline-none"
+          className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-pink-400 focus:outline-none"
         />
+        <button
+          onClick={() => updateProfile(emailForm, "Email")}
+          disabled={loading === "Email"}
+          className="px-6 py-2 bg-gradient-to-r from-pink-500 to-pink-600 text-white font-medium rounded-lg shadow hover:from-pink-600 hover:to-pink-700 transition disabled:opacity-50"
+        >
+          {loading === "Email" ? "Saving..." : "Save"}
+        </button>
+      </div>
+
+      {/* --- Mobile Card --- */}
+      <div className="bg-white shadow-md rounded-xl p-6 space-y-4">
+        <h2 className="text-xl font-semibold text-gray-700">Mobile</h2>
         <input
           type="text"
-          name="mobile"
-          value={form.mobile}
-          onChange={handleChange}
+          value={mobileForm.mobile}
+          onChange={(e) => setMobileForm({ mobile: e.target.value })}
           placeholder="Mobile"
-          className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-pink-400 focus:outline-none"
+          className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-pink-400 focus:outline-none"
         />
-
-        {/* Password fields */}
-        <input
-          type="password"
-          name="oldPassword"
-          value={form.oldPassword}
-          onChange={handleChange}
-          placeholder="Old Password"
-          className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-pink-400 focus:outline-none"
-        />
-        <input
-          type="password"
-          name="newPassword"
-          value={form.newPassword}
-          onChange={handleChange}
-          placeholder="New Password"
-          className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-pink-400 focus:outline-none"
-        />
-
         <button
-          type="submit"
-          disabled={loading}
-          className="w-full py-2 bg-pink-600 text-white font-medium rounded-lg shadow hover:bg-pink-700 transition disabled:opacity-50"
+          onClick={() => updateProfile(mobileForm, "Mobile")}
+          disabled={loading === "Mobile"}
+          className="px-6 py-2 bg-gradient-to-r from-pink-500 to-pink-600 text-white font-medium rounded-lg shadow hover:from-pink-600 hover:to-pink-700 transition disabled:opacity-50"
         >
-          {loading ? "Updating..." : "Update Profile"}
+          {loading === "Mobile" ? "Saving..." : "Save"}
         </button>
-      </form>
+      </div>
+
+      {/* --- Password Card --- */}
+      <div className="bg-white shadow-md rounded-xl p-6 space-y-4">
+        <h2 className="text-xl font-semibold text-gray-700">Password</h2>
+        <input
+          type="password"
+          value={passwordForm.oldPassword}
+          onChange={(e) => setPasswordForm({ ...passwordForm, oldPassword: e.target.value })}
+          placeholder="Old Password"
+          className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-pink-400 focus:outline-none"
+        />
+        <input
+          type="password"
+          value={passwordForm.newPassword}
+          onChange={(e) => setPasswordForm({ ...passwordForm, newPassword: e.target.value })}
+          placeholder="New Password"
+          className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-pink-400 focus:outline-none"
+        />
+        <button
+          onClick={() => updateProfile(passwordForm, "Password")}
+          disabled={loading === "Password"}
+          className="px-6 py-2 bg-gradient-to-r from-pink-500 to-pink-600 text-white font-medium rounded-lg shadow hover:from-pink-600 hover:to-pink-700 transition disabled:opacity-50"
+        >
+          {loading === "Password" ? "Saving..." : "Save"}
+        </button>
+      </div>
     </div>
   );
 }

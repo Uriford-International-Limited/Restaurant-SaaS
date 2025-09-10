@@ -23,13 +23,13 @@ export async function PUT(req: Request) {
       return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
 
-    // Update normal profile fields
-    user.firstName = firstName;
-    user.lastName = lastName;
-    user.mobile = mobile;
-    user.email = email;
+    // Update normal profile fields (always send required fields)
+    if (firstName !== undefined) user.firstName = firstName;
+    if (lastName !== undefined) user.lastName = lastName;
+    if (email !== undefined) user.email = email;
+    if (mobile !== undefined) user.mobile = mobile;
 
-    // ✅ Password change logic
+    // Password change logic
     if (oldPassword && newPassword) {
       const isValid = await bcrypt.compare(oldPassword, user.password);
       if (!isValid) {

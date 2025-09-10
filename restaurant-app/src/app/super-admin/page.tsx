@@ -47,7 +47,10 @@ export default function SuperAdminPage() {
               key={user._id}
               className="border-t hover:bg-gray-50 transition"
             >
-              <td className="p-3">{user.name}</td>
+              <td className="p-3">{user.firstName && user.lastName
+  ? `${user.firstName} ${user.lastName}`
+  : user.name}
+</td>
               <td className="p-3">{user.email}</td>
               <td
                 className={`p-3 font-semibold ${
